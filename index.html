@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirección de Plataforma ZARA WiFi</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+    <h1>Detectando su dispositivo...</h1>
+    <p>Si no es redirigido automáticamente, compruebe que su navegador tiene JavaScript habilitado.</p>
+
+    <script>
+        /**
+         * 🚀 Lógica de Redirección Basada en User-Agent
+         */
+
+        // 1. URLs de destino
+        const URL_ANDROID = "http://api.inditex.com/openroamin/openroaming/v1/certificate?cadena=zara&platform=android";
+        // NOTA: Esta URL usa el esquema 'ms-settings' y debe estar codificada.
+        const URL_WINDOWS = "ms-settings:wifi-provisioning?uri=http%3A%2F%2Fapi.inditex.com%2Fopenroamin%2Fopenroaming%2Fv1%2Fcertificate%3Fcadena%3Dzara%26platform%3Dwindows";
+        const URL_IOS = "https://www.zara.com/openwifi/";
+        const URL_DEFAULT = "https://splash.dnaspaces.eu/s/6881/Home";
+
+        // 2. Obtener el User Agent (lo convertimos a minúsculas para una coincidencia insensible a mayúsculas)
+        const userAgent = navigator.userAgent.toLowerCase();
+        let urlDestino = URL_DEFAULT;
+
+        // 3. Detección de Plataforma
+        
+        // Detección de Android (incluye móviles y tabletas)
+        if (userAgent.includes('android')) {
+            urlDestino = URL_ANDROID;
+        
+        // Detección de iOS (iPhone, iPad, iPod)
+        // Usamos una comprobación adicional para iPad moderno que podría no tener 'iPad' en el User-Agent.
+        } else if (
+            userAgent.includes('iphone') || 
+            userAgent.includes('ipad') || 
+            (userAgent.includes('macintosh') && navigator.maxTouchPoints && navigator.maxTouchPoints > 2)
+        ) {
+            urlDestino = URL_IOS;
+        
+        // Detección de Windows (escritorio y tabletas)
+        } else if (userAgent.includes('windows')) {
+            urlDestino = URL_WINDOWS;
+        }
+
+        // 4. Redirección final
+        
+        // Usamos window.location.replace() en lugar de window.location.href para evitar que la página de 
+        // redirección se guarde en el historial del navegador. Esto es más limpio para el usuario.
+        window.location.replace(urlDestino);
+
+        // Opcionalmente, para depuración:
+        // console.log("User Agent detectado:", userAgent);
+        // console.log("Redirigiendo a:", urlDestino);
+
+    </script>
+</body>
+</html>
