@@ -27,34 +27,36 @@
 
         // 2. Obtener el User Agent (lo convertimos a minúsculas para una coincidencia insensible a mayúsculas)
         const userAgent = navigator.userAgent.toLowerCase();
-        let urlDestino = URL_DEFAULT;
+        const platform  = navigator.platform.toLowerCase(); 
+        let urlDestino  = URL_DEFAULT;
 
-        // 3. Detección de Plataforma
+        // 3. Lógica de Detección Reforzada
         
-        // Detección de Android (incluye móviles y tabletas)
+        // --- ANDROID ---
         if (userAgent.includes('android')) {
             urlDestino = URL_ANDROID;
+        } 
         
-        // Detección de iOS (iPhone, iPad, iPod)
-        // Usamos una comprobación adicional para iPad moderno que podría no tener 'iPad' en el User-Agent.
-        } else if (
+        // --- ECOSISTEMA APPLE (MacBook, iPhone, iPad, iPod) ---
+        else if (
             userAgent.includes('iphone') || 
             userAgent.includes('ipad') || 
+            userAgent.includes('ipod') || 
             userAgent.includes('macintosh') || 
-            platform.includes('mac') || // Detecta la plataforma a nivel de SO
-            (navigator.maxTouchPoints > 1 && platform.includes('mac')) // iPads modernos
-                ) {
-        
+            platform.includes('mac') ||
+            platform.includes('iphone') ||
+            platform.includes('ipad') ||
+            platform.includes('ipod')
+        ) {
             urlDestino = URL_IOS;
-        }
+        } 
         
-        // Detección de Windows (escritorio y tabletas)
-        } else if (userAgent.includes('windows')) {
+        // --- WINDOWS ---
+        else if (userAgent.includes('windows') || platform.includes('win')) {
             urlDestino = URL_WINDOWS;
         }
 
         // 4. Redirección final
-        
         // Usamos window.location.replace() en lugar de window.location.href para evitar que la página de 
         // redirección se guarde en el historial del navegador. Esto es más limpio para el usuario.
         window.location.replace(urlDestino);
