@@ -40,8 +40,11 @@
         } else if (
             userAgent.includes('iphone') || 
             userAgent.includes('ipad') || 
-            (userAgent.includes('Macintosh') )
-        ) {
+            userAgent.includes('macintosh') || 
+            platform.includes('mac') || // Detecta la plataforma a nivel de SO
+            (navigator.maxTouchPoints > 1 && platform.includes('mac')) // iPads modernos
+                ) {
+        
             urlDestino = URL_IOS;
         
         // Detección de Windows (escritorio y tabletas)
